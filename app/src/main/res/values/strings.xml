@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SharedPreferences</string>
+    <string name="enter_address">Enter Address</string>
+    <string name="enter_age">Enter Age</string>
+    <string name="register">Register</string>
+    <string name="enter_name">Enter Name</string>
 </resources>

@@ -22,19 +22,13 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextName;
     private EditText editTextAddress;
     private EditText editTextAge;
-    private String name;
-    private String address;
-    private int age=0;
-    private Date date;
-    private SharedPreferences sharedPref;
-    protected static int flag = 0;
     Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        flag = 0;
+        Helper.flag = 0;
         intent = new Intent(getApplicationContext(), ProfileActivity.class);
-        sharedPref = getSharedPreferences("SharedPref1",MODE_PRIVATE);
+        Helper.sharedPref = getSharedPreferences("SharedPref1", MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button);
@@ -44,21 +38,18 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                name = editTextName.getText().toString();
-                address = editTextAddress.getText().toString();
+                Helper.name = editTextName.getText().toString();
+                Helper.address = editTextAddress.getText().toString();
                 String temp = editTextAge.getText().toString();
-                if(TextUtils.isEmpty(name) || TextUtils.isEmpty(address) || TextUtils.isEmpty(temp)){
-                    Toast.makeText(getApplicationContext(),"Complete all the fields",Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    age = Integer.parseInt(temp);
-                    date = new Date();
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("name",name);
-                    editor.putString("address",address);
-                    editor.putInt("age",age);
-                    editor.putString("date",date.toString());
-                    editor.putLong("date",date.getTime());
+                Boolean valid = validateTextFields(temp);
+                if (valid) {
+                    Helper.date = new Date();
+                    SharedPreferences.Editor editor = Helper.sharedPref.edit();
+                    editor.putString("name", Helper.name);
+                    editor.putString("address", Helper.address);
+                    editor.putInt("age", Helper.age);
+                    editor.putString("date", Helper.date.toString());
+                    editor.putLong("date", Helper.date.getTime());
                     editor.apply();
                     startActivity(intent);
                 }
@@ -67,12 +58,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        if(flag==1){
+    protected void onRestart() {
+        super.onRestart();
+        if (Helper.flag == 1) {
             intent = new Intent(getApplicationContext(), ProfileActivity.class);
             startActivity(intent);
+        } else if (Helper.flag == 2) {
+            moveTaskToBack(true);
+            Helper.flag = 1;
         }
+    }
+
+    private boolean validateTextFields(String temp) {
+        boolean valid = true;
+        if (TextUtils.isEmpty(Helper.name)) {
+            editTextName.setError("Required field");
+            valid = false;
+        }
+        if (TextUtils.isEmpty(Helper.address)) {
+            editTextAddress.setError("Required field");
+            valid = false;
+        }
+        if (TextUtils.isEmpty(temp)) {
+            editTextAge.setError("Required field");
+            valid = false;
+        } else {
+            Helper.age = Integer.parseInt(temp);
+            if (Helper.age > 100) {
+                editTextAge.setError("Age shoud be less than 100");
+                valid = false;
+            }
+        }
+        return valid;
     }
 
 }
