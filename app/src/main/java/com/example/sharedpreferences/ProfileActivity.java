@@ -1,80 +1,105 @@
 package com.example.sharedpreferences;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private SharedPreferences sharedPref;
     TextView textViewName;
     TextView textViewAddress;
     TextView textViewAge;
     TextView textViewCurrentTime;
     TextView textViewDiffInTime;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         setData();
+        setDataToFile();
+    }
+
+    private void setDataToFile(){
+        File file = new File(ProfileActivity.this.getFilesDir(), "text");
+        System.out.println(file);
+        file.mkdir();
+        File addFile = null;
+        try {
+            addFile = new File(file, "sample");
+            FileWriter writer = new FileWriter(addFile);
+            writer.append(SharedPrefHelper.getName()).append("\n");
+            writer.append(SharedPrefHelper.getAddress()).append("\n");
+            writer.append(String.valueOf(SharedPrefHelper.getAge())).append("\n");
+            Date date = SharedPrefHelper.getDate();
+            @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateformat));
+            String dateFor = dateFormat.format(date);
+            writer.append(dateFor + "\n");
+            writer.append(String.valueOf(SharedPrefHelper.getFlag())).append("\n");
+            writer.flush();
+            writer.close();
+        } catch (Exception e) { }
+        SharedPrefHelper.setFlag(1);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (Helper.flag == 1) {
+        if (SharedPrefHelper.getFlag() == 1) {
             setContentView(R.layout.activity_profile);
-            Helper.currDate = new Date();
-            setDateDiff(Helper.date, Helper.currDate);
+            SharedPrefHelper.setCurrDate(new Date());
+            setDateDiff(SharedPrefHelper.getDate(), SharedPrefHelper.getCurrDate());
             setData();
         }
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Helper.flag = 2;
+        SharedPrefHelper.setFlag(2);
         this.finish();
     }
 
     private String setDateDiff(Date date, Date currDate) {
         String result = "";
+
         Calendar regDate = Calendar.getInstance();
         Calendar profDate = Calendar.getInstance();
         regDate.setTime(date);
         profDate.setTime(currDate);
-        Helper.years = profDate.get(Calendar.YEAR) - regDate.get(Calendar.YEAR);
-        Helper.months = profDate.get(Calendar.MONTH) - regDate.get(Calendar.MONTH);
-        Helper.days = profDate.get(Calendar.DAY_OF_MONTH) - regDate.get(Calendar.DAY_OF_MONTH);
-        Helper.hours = profDate.get(Calendar.HOUR_OF_DAY) - regDate.get(Calendar.HOUR_OF_DAY);
-        Helper.mins = profDate.get(Calendar.MINUTE) - regDate.get(Calendar.MINUTE);
-        Helper.secs = profDate.get(Calendar.SECOND) - regDate.get(Calendar.SECOND);
-        if (Helper.years > 0)
-            result += Helper.years + " years ";
-        if (Helper.months > 0)
-            result += Helper.months + " months ";
-        if (Helper.days > 0)
-            result += Helper.days + " days ";
-        if (Helper.hours > 0)
-            result += Helper.hours + " hours ";
-        if (Helper.mins > 0)
-            result += Helper.mins + " mins ";
-        if (Helper.secs < 0)
-            Helper.secs += 60;
-        result += Helper.secs + " secs ";
+        SharedPrefHelper.setYears(profDate.get(Calendar.YEAR) - regDate.get(Calendar.YEAR));
+        SharedPrefHelper.setMonths(profDate.get(Calendar.MONTH) - regDate.get(Calendar.MONTH));
+        SharedPrefHelper.setDays(profDate.get(Calendar.DAY_OF_MONTH) - regDate.get(Calendar.DAY_OF_MONTH));
+        SharedPrefHelper.setHours(profDate.get(Calendar.HOUR_OF_DAY) - regDate.get(Calendar.HOUR_OF_DAY));
+        SharedPrefHelper.setMins(profDate.get(Calendar.MINUTE) - regDate.get(Calendar.MINUTE));
+        SharedPrefHelper.setSecs(profDate.get(Calendar.SECOND) - regDate.get(Calendar.SECOND));
+
+        if (SharedPrefHelper.getYears() > 0)
+            result += SharedPrefHelper.getYears() + " years ";
+        if (SharedPrefHelper.getMonths() > 0)
+            result += SharedPrefHelper.getMonths() + " months ";
+        if (SharedPrefHelper.getDays() > 0)
+            result += SharedPrefHelper.getDays() + " days ";
+        if (SharedPrefHelper.getHours() > 0)
+            result += SharedPrefHelper.getHours() + "hours ";
+        if (SharedPrefHelper.getMins() > 0)
+            result += SharedPrefHelper.getMins() + " mins ";
+        if (SharedPrefHelper.getSecs() < 0)
+            SharedPrefHelper.setSecs(SharedPrefHelper.getSecs()+60);
+        result += SharedPrefHelper.getSecs() + " secs ";
         return result;
     }
 
@@ -84,18 +109,14 @@ public class ProfileActivity extends AppCompatActivity {
         textViewAge = (TextView) findViewById(R.id.textViewAge);
         textViewCurrentTime = (TextView) findViewById(R.id.textViewCurrentTime);
         textViewDiffInTime = (TextView) findViewById(R.id.textViewDiffInTime);
-        sharedPref = getSharedPreferences("SharedPref1", MODE_PRIVATE);
-        Helper.name = sharedPref.getString("name", null);
-        Helper.address = sharedPref.getString("address", null);
-        Helper.age = sharedPref.getInt("age", 0);
-        Helper.date = new Date(sharedPref.getLong("date", 0));
-        Helper.currDate = new Date();
-        Helper.diffInTime = setDateDiff(Helper.date, Helper.currDate);
-        Helper.flag = 1;
-        textViewName.setText(String.format("Name : %s", Helper.name));
-        textViewAddress.setText(String.format("Address : %s", Helper.address));
-        textViewAge.setText("Age : " + Helper.age);
-        textViewCurrentTime.setText(String.format("Current Date : %s", Helper.currDate.toString()));
-        textViewDiffInTime.setText(String.format("Difference in Time : %s", Helper.diffInTime));
+
+        SharedPrefHelper.setCurrDate(new Date());
+        SharedPrefHelper.setDiffInTime(setDateDiff(SharedPrefHelper.getDate(),SharedPrefHelper.getCurrDate()));
+
+        textViewName.setText(String.format("Name : %s", SharedPrefHelper.getName()));
+        textViewAddress.setText(String.format("Address : %s", SharedPrefHelper.getAddress()));
+        textViewAge.setText(String.format(getString(R.string.age), SharedPrefHelper.getAge()));
+        textViewCurrentTime.setText(String.format("Current Date : %s", SharedPrefHelper.getCurrDate()));
+        textViewDiffInTime.setText(String.format("Difference in Time : %s", SharedPrefHelper.getDiffInTime()));
     }
 }

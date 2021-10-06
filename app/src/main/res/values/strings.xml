@@ -4,4 +4,8 @@
     <string name="enter_age">Enter Age</string>
     <string name="register">Register</string>
     <string name="enter_name">Enter Name</string>
+    <string name="required_field">Required field</string>
+    <string name="age_criteria">Age shoud be less than 100</string>
+    <string name="age">Age : %d</string>
+    <string name="dateformat">yyyy-MM-dd HH:mm:ss</string>
 </resources>
