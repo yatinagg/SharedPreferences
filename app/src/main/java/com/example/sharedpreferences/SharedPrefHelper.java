@@ -5,7 +5,10 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class SharedPrefHelper {
 
@@ -25,10 +28,32 @@ public class SharedPrefHelper {
     private static int flag = 0;
     private static SharedPreferences.Editor editor;
     private static String data;
+    private static String[] keys = {"Name","Address","Age","Date","Flag"};
 
     public static void create(Context context) {
         sharedPreferences = context.getSharedPreferences("SharedPref1", MODE_PRIVATE);
         editor = sharedPreferences.edit();
+    }
+    
+    public static void getData(DateFormat dateFormat){
+        SharedPrefHelper.setName(SharedPrefHelper.getSharedPreferences().getString(keys[0],null));
+        SharedPrefHelper.setAddress(SharedPrefHelper.getSharedPreferences().getString(keys[1],null));
+        SharedPrefHelper.setAge(SharedPrefHelper.getSharedPreferences().getInt(keys[2],0));
+        Date date = null;
+        try {
+            date = dateFormat.parse(SharedPrefHelper.getSharedPreferences().getString(keys[3],null));
+        } catch (Exception e) { }
+        SharedPrefHelper.setDate(date);
+        SharedPrefHelper.setFlag(SharedPrefHelper.getSharedPreferences().getInt(keys[4],0));
+    }
+
+    public static void store(String dateFor){
+        editor.putString(keys[0],name);
+        editor.putString(keys[1],address);
+        editor.putInt(keys[2],age);
+        editor.putString(keys[3],dateFor);
+        editor.putInt(keys[4],flag);
+        editor.apply();
     }
 
     public static SharedPreferences getSharedPreferences() {

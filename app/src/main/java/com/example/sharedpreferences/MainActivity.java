@@ -29,6 +29,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,30 +37,19 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextName;
     private EditText editTextAddress;
     private EditText editTextAge;
-    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        intent = new Intent(getApplicationContext(), ProfileActivity.class);
         SharedPrefHelper.create(this);
         setFlag();
 
-        readDataFromFile();
-        String data = SharedPrefHelper.getData();
-        if(data != null) {
-            String[] arr = SharedPrefHelper.getData().split("\n");
-            SharedPrefHelper.setName(arr[0]);
-            SharedPrefHelper.setAddress(arr[1]);
-            SharedPrefHelper.setAge(Integer.parseInt(arr[2]));
-            Date date = null;
-            @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateformat));
-            try {
-                date = dateFormat.parse(arr[3]);
-            } catch (Exception e) { }
-            SharedPrefHelper.setDate(date);
-            startActivity(intent);
+        String name = SharedPrefHelper.getSharedPreferences().getString(getString(R.string.name),null);
+        if(name!=null){
+            DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateformat), Locale.US);
+            SharedPrefHelper.getData(dateFormat);
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         }
 
         setContentView(R.layout.activity_main);
@@ -89,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     SharedPrefHelper.setAge(Integer.parseInt(temp));
                     SharedPrefHelper.setDate(date);
                     SharedPrefHelper.editorApply();
-                    startActivity(intent);
+                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 }
             }
         });
@@ -98,9 +88,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        Log.d("why","restart");
         if (SharedPrefHelper.getFlag() == 1) {
-            intent = new Intent(getApplicationContext(), ProfileActivity.class);
-            startActivity(intent);
+            Log.d("why","restart1");
+            String name = SharedPrefHelper.getSharedPreferences().getString(getString(R.string.name),null);
+            if(name!=null){
+                DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateformat), Locale.US);
+                SharedPrefHelper.getData(dateFormat);
+            }
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         } else if (SharedPrefHelper.getFlag() == 2) {
             moveTaskToBack(true);
             SharedPrefHelper.setFlag(1);
@@ -132,29 +128,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setFlag(){
-        File file = new File(MainActivity.this.getFilesDir(), "text");
-        if (!file.exists())
+        String name = SharedPrefHelper.getSharedPreferences().getString(getString(R.string.name),null);
+        if(name==null) {
+            Log.d("why","null");
             SharedPrefHelper.setFlag(0);
-    }
-
-    private void readDataFromFile(){
-        //Read text from file
-        StringBuilder text = new StringBuilder();
-        File file = new File(MainActivity.this.getFilesDir(), "text");
-        try {
-            File addFile = new File(file, "sample");
-            BufferedReader br = new BufferedReader(new FileReader(addFile));
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
-            }
-            System.out.println(text);
-            SharedPrefHelper.setData(String.valueOf(text));
-            br.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

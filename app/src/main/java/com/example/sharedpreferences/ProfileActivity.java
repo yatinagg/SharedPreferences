@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -29,35 +30,17 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         setData();
-        setDataToFile();
-    }
-
-    private void setDataToFile(){
-        File file = new File(ProfileActivity.this.getFilesDir(), "text");
-        System.out.println(file);
-        file.mkdir();
-        File addFile = null;
-        try {
-            addFile = new File(file, "sample");
-            FileWriter writer = new FileWriter(addFile);
-            writer.append(SharedPrefHelper.getName()).append("\n");
-            writer.append(SharedPrefHelper.getAddress()).append("\n");
-            writer.append(String.valueOf(SharedPrefHelper.getAge())).append("\n");
-            Date date = SharedPrefHelper.getDate();
-            @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateformat));
-            String dateFor = dateFormat.format(date);
-            writer.append(dateFor + "\n");
-            writer.append(String.valueOf(SharedPrefHelper.getFlag())).append("\n");
-            writer.flush();
-            writer.close();
-        } catch (Exception e) { }
+        Date date = SharedPrefHelper.getDate();
+        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateformat), Locale.US);
+        String dateFor = dateFormat.format(date);
         SharedPrefHelper.setFlag(1);
-
+        SharedPrefHelper.store(dateFor);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("why","flag " + SharedPrefHelper.getFlag());
         if (SharedPrefHelper.getFlag() == 1) {
             setContentView(R.layout.activity_profile);
             SharedPrefHelper.setCurrDate(new Date());

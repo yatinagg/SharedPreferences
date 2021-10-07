@@ -8,4 +8,5 @@
     <string name="age_criteria">Age shoud be less than 100</string>
     <string name="age">Age : %d</string>
     <string name="dateformat">yyyy-MM-dd HH:mm:ss</string>
+    <string name="name">Name</string>
 </resources>
