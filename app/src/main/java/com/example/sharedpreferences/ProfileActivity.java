@@ -19,11 +19,11 @@ import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView textViewName;
-    TextView textViewAddress;
-    TextView textViewAge;
-    TextView textViewCurrentTime;
-    TextView textViewDiffInTime;
+    private TextView textViewName;
+    private TextView textViewAddress;
+    private TextView textViewAge;
+    private TextView textViewCurrentTime;
+    private TextView textViewDiffInTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,6 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("why","flag " + SharedPrefHelper.getFlag());
         if (SharedPrefHelper.getFlag() == 1) {
             setContentView(R.layout.activity_profile);
             SharedPrefHelper.setCurrDate(new Date());
