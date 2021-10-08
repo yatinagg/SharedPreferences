@@ -1,16 +1,10 @@
 package com.example.sharedpreferences;
 
-import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,12 +12,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
-
-    private TextView textViewName;
-    private TextView textViewAddress;
-    private TextView textViewAge;
-    private TextView textViewCurrentTime;
-    private TextView textViewDiffInTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +74,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setData() {
-        textViewName = (TextView) findViewById(R.id.textViewName);
-        textViewAddress = (TextView) findViewById(R.id.textViewAddress);
-        textViewAge = (TextView) findViewById(R.id.textViewAge);
-        textViewCurrentTime = (TextView) findViewById(R.id.textViewCurrentTime);
-        textViewDiffInTime = (TextView) findViewById(R.id.textViewDiffInTime);
+        TextView textViewName = (TextView) findViewById(R.id.textViewName);
+        TextView textViewAddress = (TextView) findViewById(R.id.textViewAddress);
+        TextView textViewAge = (TextView) findViewById(R.id.textViewAge);
+        TextView textViewCurrentTime = (TextView) findViewById(R.id.textViewCurrentTime);
+        TextView textViewDiffInTime = (TextView) findViewById(R.id.textViewDiffInTime);
 
         SharedPrefHelper.setCurrDate(new Date());
         SharedPrefHelper.setDiffInTime(setDateDiff(SharedPrefHelper.getDate(),SharedPrefHelper.getCurrDate()));

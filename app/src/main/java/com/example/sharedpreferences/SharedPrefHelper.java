@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class SharedPrefHelper {
 
@@ -27,8 +25,7 @@ public class SharedPrefHelper {
     private static String diffInTime;
     private static int flag = 0;
     private static SharedPreferences.Editor editor;
-    private static String data;
-    private static String[] keys = {"Name","Address","Age","Date","Flag"};
+    private static final String[] keys = {"Name","Address","Age","Date","Flag"};
 
     public static void create(Context context) {
         sharedPreferences = context.getSharedPreferences("SharedPref1", MODE_PRIVATE);
@@ -42,7 +39,9 @@ public class SharedPrefHelper {
         Date date = null;
         try {
             date = dateFormat.parse(SharedPrefHelper.getSharedPreferences().getString(keys[3],null));
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         SharedPrefHelper.setDate(date);
         SharedPrefHelper.setFlag(SharedPrefHelper.getSharedPreferences().getInt(keys[4],0));
     }
@@ -170,13 +169,5 @@ public class SharedPrefHelper {
 
     public static void editorApply() {
         editor.apply();
-    }
-
-    public static String getData() {
-        return data;
-    }
-
-    public static void setData(String data) {
-        SharedPrefHelper.data = data;
     }
 }

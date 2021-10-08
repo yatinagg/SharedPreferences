@@ -1,33 +1,16 @@
 package com.example.sharedpreferences;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -65,22 +48,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpListener(){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        button.setOnClickListener(view -> {
+            SharedPrefHelper.setName(editTextName.getText().toString());
+            SharedPrefHelper.setAddress(editTextAddress.getText().toString());
+            String temp = editTextAge.getText().toString();
+            boolean valid = validateTextFields(temp);
+            if (valid) {
+                Date date = new Date();
                 SharedPrefHelper.setName(editTextName.getText().toString());
                 SharedPrefHelper.setAddress(editTextAddress.getText().toString());
-                String temp = editTextAge.getText().toString();
-                boolean valid = validateTextFields(temp);
-                if (valid) {
-                    Date date = new Date();
-                    SharedPrefHelper.setName(editTextName.getText().toString());
-                    SharedPrefHelper.setAddress(editTextAddress.getText().toString());
-                    SharedPrefHelper.setAge(Integer.parseInt(temp));
-                    SharedPrefHelper.setDate(date);
-                    SharedPrefHelper.editorApply();
-                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                }
+                SharedPrefHelper.setAge(Integer.parseInt(temp));
+                SharedPrefHelper.setDate(date);
+                SharedPrefHelper.editorApply();
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
             }
         });
     }
