@@ -8,166 +8,74 @@ import android.content.SharedPreferences;
 import java.text.DateFormat;
 import java.util.Date;
 
+// Shared preference helper
 public class SharedPrefHelper {
 
     private static SharedPreferences sharedPreferences;
-    private static String name;
-    private static String address;
-    private static int age;
-    private static Date date;
-    private static Date currDate;
-    private static int years;
-    private static int months;
-    private static int days;
-    private static int hours;
-    private static int mins;
-    private static int secs;
-    private static String diffInTime;
-    private static int flag = 0;
+    private static int flag;
     private static SharedPreferences.Editor editor;
-    private static final String[] keys = {"Name","Address","Age","Date","Flag"};
 
+    private static final String NAME = "Name";
+    private static final String ADDRESS = "Address";
+    private static final String AGE = "Age";
+    private static final String DATE = "Date";
+    private static final String FLAG = "Flag";
+
+    // creating the shared preference
     public static void create(Context context) {
         sharedPreferences = context.getSharedPreferences("SharedPref1", MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
-    
-    public static void getData(DateFormat dateFormat){
-        SharedPrefHelper.setName(SharedPrefHelper.getSharedPreferences().getString(keys[0],null));
-        SharedPrefHelper.setAddress(SharedPrefHelper.getSharedPreferences().getString(keys[1],null));
-        SharedPrefHelper.setAge(SharedPrefHelper.getSharedPreferences().getInt(keys[2],0));
-        Date date = null;
-        try {
-            date = dateFormat.parse(SharedPrefHelper.getSharedPreferences().getString(keys[3],null));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        SharedPrefHelper.setDate(date);
-        SharedPrefHelper.setFlag(SharedPrefHelper.getSharedPreferences().getInt(keys[4],0));
-    }
 
-    public static void store(String dateFor){
-        editor.putString(keys[0],name);
-        editor.putString(keys[1],address);
-        editor.putInt(keys[2],age);
-        editor.putString(keys[3],dateFor);
-        editor.putInt(keys[4],flag);
+    // storing the data to shared preference
+    public static void store(String name, String address, int age, int flag) {
+        editor.putString(NAME, name);
+        editor.putString(ADDRESS, address);
+        editor.putInt(AGE, age);
+        editor.putInt(FLAG, flag);
         editor.apply();
     }
 
-    public static SharedPreferences getSharedPreferences() {
+    // storing the data to shared preference
+    public static void store(String dateFor) {
+        editor.putString(DATE, dateFor);
+        editor.apply();
+    }
+
+    private static SharedPreferences getSharedPreferences() {
         return sharedPreferences;
     }
 
-    public static void setSharedPreferences(SharedPreferences sharedPreferences) {
-        SharedPrefHelper.sharedPreferences = sharedPreferences;
-    }
+    // getters
 
     public static String getName() {
-        return name;
-    }
-
-    public static void setName(String name) {
-        SharedPrefHelper.name = name;
+        return SharedPrefHelper.getSharedPreferences().getString(NAME, null);
     }
 
     public static String getAddress() {
-        return address;
-    }
-
-    public static void setAddress(String address) {
-        SharedPrefHelper.address = address;
+        return SharedPrefHelper.getSharedPreferences().getString(ADDRESS, null);
     }
 
     public static int getAge() {
-        return age;
+        return SharedPrefHelper.getSharedPreferences().getInt(AGE, 0);
     }
 
-    public static void setAge(int age) {
-        SharedPrefHelper.age = age;
-    }
-
-    public static Date getDate() {
+    public static Date getDate(DateFormat dateFormat) {
+        Date date = null;
+        try {
+            date = dateFormat.parse(SharedPrefHelper.getSharedPreferences().getString(DATE, null));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return date;
-    }
-
-    public static void setDate(Date date) {
-        SharedPrefHelper.date = date;
-    }
-
-    public static Date getCurrDate() {
-        return currDate;
-    }
-
-    public static void setCurrDate(Date currDate) {
-        SharedPrefHelper.currDate = currDate;
-    }
-
-    public static int getYears() {
-        return years;
-    }
-
-    public static void setYears(int years) {
-        SharedPrefHelper.years = years;
-    }
-
-    public static int getMonths() {
-        return months;
-    }
-
-    public static void setMonths(int months) {
-        SharedPrefHelper.months = months;
-    }
-
-    public static int getDays() {
-        return days;
-    }
-
-    public static void setDays(int days) {
-        SharedPrefHelper.days = days;
-    }
-
-    public static int getHours() {
-        return hours;
-    }
-
-    public static void setHours(int hours) {
-        SharedPrefHelper.hours = hours;
-    }
-
-    public static int getMins() {
-        return mins;
-    }
-
-    public static void setMins(int mins) {
-        SharedPrefHelper.mins = mins;
-    }
-
-    public static int getSecs() {
-        return secs;
-    }
-
-    public static void setSecs(int secs) {
-        SharedPrefHelper.secs = secs;
-    }
-
-    public static String getDiffInTime() {
-        return diffInTime;
-    }
-
-    public static void setDiffInTime(String diffInTime) {
-        SharedPrefHelper.diffInTime = diffInTime;
     }
 
     public static int getFlag() {
         return flag;
     }
 
+    // setter
     public static void setFlag(int flag) {
         SharedPrefHelper.flag = flag;
-    }
-
-    public static void editorApply() {
-        editor.apply();
     }
 }

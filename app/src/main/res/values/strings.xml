@@ -6,7 +6,7 @@
     <string name="enter_name">Enter Name</string>
     <string name="required_field">Required field</string>
     <string name="age_criteria">Age shoud be less than 100</string>
-    <string name="age">Age : %d</string>
-    <string name="dateformat">yyyy-MM-dd HH:mm:ss</string>
+    <string name="dateFormat">yyyy-MM-dd HH:mm:ss</string>
     <string name="name">Name</string>
+    <string name="age_print">Age : %d</string>
 </resources>

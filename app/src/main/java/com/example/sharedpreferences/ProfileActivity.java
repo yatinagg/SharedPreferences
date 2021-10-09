@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -18,8 +19,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         setData();
-        Date date = SharedPrefHelper.getDate();
-        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateformat), Locale.US);
+        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateFormat), Locale.US);
+        Date date = SharedPrefHelper.getDate(dateFormat);
         String dateFor = dateFormat.format(date);
         SharedPrefHelper.setFlag(1);
         SharedPrefHelper.store(dateFor);
@@ -30,8 +31,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onResume();
         if (SharedPrefHelper.getFlag() == 1) {
             setContentView(R.layout.activity_profile);
-            SharedPrefHelper.setCurrDate(new Date());
-            setDateDiff(SharedPrefHelper.getDate(), SharedPrefHelper.getCurrDate());
+            DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateFormat), Locale.US);
+            dateDiff(SharedPrefHelper.getDate(dateFormat), new Date());
             setData();
         }
     }
@@ -43,50 +44,51 @@ public class ProfileActivity extends AppCompatActivity {
         this.finish();
     }
 
-    private String setDateDiff(Date date, Date currDate) {
-        String result = "";
+    // set the date diff
+    private String dateDiff(Date date, Date currDate) {
 
         Calendar regDate = Calendar.getInstance();
         Calendar profDate = Calendar.getInstance();
         regDate.setTime(date);
         profDate.setTime(currDate);
-        SharedPrefHelper.setYears(profDate.get(Calendar.YEAR) - regDate.get(Calendar.YEAR));
-        SharedPrefHelper.setMonths(profDate.get(Calendar.MONTH) - regDate.get(Calendar.MONTH));
-        SharedPrefHelper.setDays(profDate.get(Calendar.DAY_OF_MONTH) - regDate.get(Calendar.DAY_OF_MONTH));
-        SharedPrefHelper.setHours(profDate.get(Calendar.HOUR_OF_DAY) - regDate.get(Calendar.HOUR_OF_DAY));
-        SharedPrefHelper.setMins(profDate.get(Calendar.MINUTE) - regDate.get(Calendar.MINUTE));
-        SharedPrefHelper.setSecs(profDate.get(Calendar.SECOND) - regDate.get(Calendar.SECOND));
 
-        if (SharedPrefHelper.getYears() > 0)
-            result += SharedPrefHelper.getYears() + " years ";
-        if (SharedPrefHelper.getMonths() > 0)
-            result += SharedPrefHelper.getMonths() + " months ";
-        if (SharedPrefHelper.getDays() > 0)
-            result += SharedPrefHelper.getDays() + " days ";
-        if (SharedPrefHelper.getHours() > 0)
-            result += SharedPrefHelper.getHours() + "hours ";
-        if (SharedPrefHelper.getMins() > 0)
-            result += SharedPrefHelper.getMins() + " mins ";
-        if (SharedPrefHelper.getSecs() < 0)
-            SharedPrefHelper.setSecs(SharedPrefHelper.getSecs()+60);
-        result += SharedPrefHelper.getSecs() + " secs ";
-        return result;
+        return formattedTime(profDate.getTimeInMillis() - regDate.getTimeInMillis());
     }
 
+    // format the time in desired format
+    private String formattedTime(Long milliseconds) {
+        int mDay = (int) TimeUnit.MILLISECONDS.toDays(milliseconds);
+        int mHr = (int) (TimeUnit.MILLISECONDS.toHours(milliseconds) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(milliseconds)));
+        int mMin = (int) (TimeUnit.MILLISECONDS.toMinutes(milliseconds) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)));
+        int mSec = (int) (TimeUnit.MILLISECONDS.toSeconds(milliseconds) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
+        int mYear = mDay / 365;
+        mDay %= 365;
+
+        StringBuilder result = new StringBuilder();
+        if (mYear != 0)
+            result.append(mYear).append("years, ");
+        if (mDay != 0)
+            result.append(mDay).append("days, ");
+        if (mHr != 0)
+            result.append(mHr).append("hours, ");
+        if (mMin != 0)
+            result.append(mMin).append("minutes, ");
+        result.append(mSec).append("seconds");
+        return result.toString();
+    }
+
+    // set the data in text fields
     private void setData() {
         TextView textViewName = (TextView) findViewById(R.id.textViewName);
         TextView textViewAddress = (TextView) findViewById(R.id.textViewAddress);
         TextView textViewAge = (TextView) findViewById(R.id.textViewAge);
-        TextView textViewCurrentTime = (TextView) findViewById(R.id.textViewCurrentTime);
         TextView textViewDiffInTime = (TextView) findViewById(R.id.textViewDiffInTime);
 
-        SharedPrefHelper.setCurrDate(new Date());
-        SharedPrefHelper.setDiffInTime(setDateDiff(SharedPrefHelper.getDate(),SharedPrefHelper.getCurrDate()));
+        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateFormat), Locale.US);
 
         textViewName.setText(String.format("Name : %s", SharedPrefHelper.getName()));
         textViewAddress.setText(String.format("Address : %s", SharedPrefHelper.getAddress()));
-        textViewAge.setText(String.format(getString(R.string.age), SharedPrefHelper.getAge()));
-        textViewCurrentTime.setText(String.format("Current Date : %s", SharedPrefHelper.getCurrDate()));
-        textViewDiffInTime.setText(String.format("Difference in Time : %s", SharedPrefHelper.getDiffInTime()));
+        textViewAge.setText(String.format(getString(R.string.age_print), SharedPrefHelper.getAge()));
+        textViewDiffInTime.setText(String.format("Difference in Time : %s", dateDiff(SharedPrefHelper.getDate(dateFormat), new Date())));
     }
 }

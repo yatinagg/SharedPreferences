@@ -13,11 +13,11 @@
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="50dp"
+        android:autofillHints="Name"
         android:ems="10"
         android:hint="@string/enter_name"
         android:inputType="textPersonName"
-        android:maxLength="30"
-        android:autofillHints="Name" />
+        android:maxLength="30" />
 
     <EditText
         android:id="@+id/editTextAddress"
@@ -25,11 +25,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
         android:layout_marginBottom="50dp"
+        android:autofillHints="Address"
         android:ems="10"
         android:hint="@string/enter_address"
         android:inputType="textPersonName"
-        android:maxLength="30"
-        android:autofillHints="Address" />
+        android:maxLength="30" />
 
     <EditText
         android:id="@+id/editTextAge"
@@ -37,11 +37,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
         android:layout_marginBottom="50dp"
+        android:autofillHints="Age"
         android:ems="10"
         android:hint="@string/enter_age"
         android:inputType="number"
-        android:maxLength="2"
-        android:autofillHints="Age" />
+        android:maxLength="2" />
 
     <Button
         android:id="@+id/button"
