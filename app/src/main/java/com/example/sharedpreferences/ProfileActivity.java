@@ -5,54 +5,46 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private TextView textViewName;
+    private TextView textViewAddress;
+    private TextView textViewAge;
+    private TextView textViewDiffInTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        setData();
-        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateFormat), Locale.US);
-        Date date = SharedPrefHelper.getDate(dateFormat);
-        String dateFor = dateFormat.format(date);
-        SharedPrefHelper.setFlag(1);
-        SharedPrefHelper.store(dateFor);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (SharedPrefHelper.getFlag() == 1) {
-            setContentView(R.layout.activity_profile);
-            DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateFormat), Locale.US);
-            dateDiff(SharedPrefHelper.getDate(dateFormat), new Date());
-            setData();
-        }
+        setupView();
+        setData();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        SharedPrefHelper.setFlag(2);
-        this.finish();
+    private void setupView() {
+        textViewName = (TextView) findViewById(R.id.textViewName);
+        textViewAddress = (TextView) findViewById(R.id.textViewAddress);
+        textViewAge = (TextView) findViewById(R.id.textViewAge);
+        textViewDiffInTime = (TextView) findViewById(R.id.textViewDiffInTime);
     }
 
-    // set the date diff
-    private String dateDiff(Date date, Date currDate) {
+    // set the data in text fields
+    private void setData() {
+        textViewName.setText(String.format("Name : %s", SharedPrefHelper.getName()));
+        textViewAddress.setText(String.format("Address : %s", SharedPrefHelper.getAddress()));
+        textViewAge.setText(String.format(getString(R.string.age_print), SharedPrefHelper.getAge()));
+        textViewDiffInTime.setText(String.format("Difference in Time : %s", dateDiff(SharedPrefHelper.getDateMilli(), System.currentTimeMillis())));
+    }
 
-        Calendar regDate = Calendar.getInstance();
-        Calendar profDate = Calendar.getInstance();
-        regDate.setTime(date);
-        profDate.setTime(currDate);
-
-        return formattedTime(profDate.getTimeInMillis() - regDate.getTimeInMillis());
+    // calculate the date difference
+    private String dateDiff(Long dateMilli, Long currDateMilli) {
+        return formattedTime(currDateMilli - dateMilli);
     }
 
     // format the time in desired format
@@ -77,18 +69,4 @@ public class ProfileActivity extends AppCompatActivity {
         return result.toString();
     }
 
-    // set the data in text fields
-    private void setData() {
-        TextView textViewName = (TextView) findViewById(R.id.textViewName);
-        TextView textViewAddress = (TextView) findViewById(R.id.textViewAddress);
-        TextView textViewAge = (TextView) findViewById(R.id.textViewAge);
-        TextView textViewDiffInTime = (TextView) findViewById(R.id.textViewDiffInTime);
-
-        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateFormat), Locale.US);
-
-        textViewName.setText(String.format("Name : %s", SharedPrefHelper.getName()));
-        textViewAddress.setText(String.format("Address : %s", SharedPrefHelper.getAddress()));
-        textViewAge.setText(String.format(getString(R.string.age_print), SharedPrefHelper.getAge()));
-        textViewDiffInTime.setText(String.format("Difference in Time : %s", dateDiff(SharedPrefHelper.getDate(dateFormat), new Date())));
-    }
 }

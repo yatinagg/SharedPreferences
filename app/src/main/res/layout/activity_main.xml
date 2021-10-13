@@ -14,7 +14,6 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="50dp"
         android:autofillHints="Name"
-        android:ems="10"
         android:hint="@string/enter_name"
         android:inputType="textPersonName"
         android:maxLength="30" />
@@ -26,7 +25,6 @@
         android:layout_marginHorizontal="50dp"
         android:layout_marginBottom="50dp"
         android:autofillHints="Address"
-        android:ems="10"
         android:hint="@string/enter_address"
         android:inputType="textPersonName"
         android:maxLength="30" />
@@ -38,7 +36,6 @@
         android:layout_marginHorizontal="50dp"
         android:layout_marginBottom="50dp"
         android:autofillHints="Age"
-        android:ems="10"
         android:hint="@string/enter_age"
         android:inputType="number"
         android:maxLength="2" />

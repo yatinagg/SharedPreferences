@@ -5,21 +5,16 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.text.DateFormat;
-import java.util.Date;
-
 // Shared preference helper
 public class SharedPrefHelper {
 
     private static SharedPreferences sharedPreferences;
-    private static int flag;
     private static SharedPreferences.Editor editor;
 
     private static final String NAME = "Name";
     private static final String ADDRESS = "Address";
     private static final String AGE = "Age";
     private static final String DATE = "Date";
-    private static final String FLAG = "Flag";
 
     // creating the shared preference
     public static void create(Context context) {
@@ -28,17 +23,11 @@ public class SharedPrefHelper {
     }
 
     // storing the data to shared preference
-    public static void store(String name, String address, int age, int flag) {
+    public static void store(String name, String address, int age, Long dateMilli) {
         editor.putString(NAME, name);
         editor.putString(ADDRESS, address);
         editor.putInt(AGE, age);
-        editor.putInt(FLAG, flag);
-        editor.apply();
-    }
-
-    // storing the data to shared preference
-    public static void store(String dateFor) {
-        editor.putString(DATE, dateFor);
+        editor.putLong(DATE, dateMilli);
         editor.apply();
     }
 
@@ -60,22 +49,8 @@ public class SharedPrefHelper {
         return SharedPrefHelper.getSharedPreferences().getInt(AGE, 0);
     }
 
-    public static Date getDate(DateFormat dateFormat) {
-        Date date = null;
-        try {
-            date = dateFormat.parse(SharedPrefHelper.getSharedPreferences().getString(DATE, null));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return date;
+    public static Long getDateMilli() {
+        return SharedPrefHelper.getSharedPreferences().getLong(DATE, 0);
     }
 
-    public static int getFlag() {
-        return flag;
-    }
-
-    // setter
-    public static void setFlag(int flag) {
-        SharedPrefHelper.flag = flag;
-    }
 }

@@ -3,16 +3,10 @@ package com.example.sharedpreferences;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,25 +17,17 @@ public class MainActivity extends AppCompatActivity {
     private String name;
     private String address;
     private int age;
-    private Date date;
-    private int flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         SharedPrefHelper.create(this);
-        setFlag();
 
         age = SharedPrefHelper.getAge();
         // if there is any previous data
-        if (age != 0) {
-            DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateFormat), Locale.US);
-            address = SharedPrefHelper.getAddress();
-            age = SharedPrefHelper.getAge();
-            date = SharedPrefHelper.getDate(dateFormat);
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-        }
+        if (age != 0)
+            startActivity(new Intent(this, ProfileActivity.class));
 
         setContentView(R.layout.activity_main);
         setUpView();
@@ -65,32 +51,11 @@ public class MainActivity extends AppCompatActivity {
                 name = editTextName.getText().toString();
                 address = editTextAddress.getText().toString();
                 age = Integer.parseInt(temp);
-                date = new Date();
-                SharedPrefHelper.store(name, address, age, flag);
-                DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateFormat), Locale.US);
-                String dateFor = dateFormat.format(date);
-                SharedPrefHelper.store(dateFor);
+                SharedPrefHelper.store(name, address, age, System.currentTimeMillis());
                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
             }
         });
     }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (SharedPrefHelper.getFlag() == 1) {
-            age = SharedPrefHelper.getAge();
-            if (age != 0) {
-                DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dateFormat), Locale.US);
-                date = SharedPrefHelper.getDate(dateFormat);
-            }
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-        } else if (SharedPrefHelper.getFlag() == 2) {
-            moveTaskToBack(true);
-            SharedPrefHelper.setFlag(1);
-        }
-    }
-
 
     // validate text fields
     private boolean validateTextFields(String temp) {
@@ -106,16 +71,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return valid;
-    }
-
-    // set flag
-    private void setFlag() {
-        String name = SharedPrefHelper.getName();
-        if (name == null) {
-            Log.d("why", "null");
-            SharedPrefHelper.setFlag(0);
-        }
-        flag = SharedPrefHelper.getFlag();
     }
 
 }
