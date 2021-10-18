@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     private Button button;
-    private EditText editTextName;
-    private EditText editTextAddress;
-    private EditText editTextAge;
+    private EditText etName;
+    private EditText etAddress;
+    private EditText etAge;
     private String name;
     private String address;
     private int age;
@@ -37,19 +37,19 @@ public class MainActivity extends AppCompatActivity {
     // setup View
     private void setUpView() {
         button = findViewById(R.id.button);
-        editTextName = findViewById(R.id.editTextName);
-        editTextAddress = findViewById(R.id.editTextAddress);
-        editTextAge = findViewById(R.id.editTextAge);
+        etName = findViewById(R.id.editTextName);
+        etAddress = findViewById(R.id.editTextAddress);
+        etAge = findViewById(R.id.editTextAge);
     }
 
     // setup listener
     private void setUpListener() {
         button.setOnClickListener(view -> {
-            String temp = editTextAge.getText().toString();
+            String temp = etAge.getText().toString();
             boolean valid = validateTextFields(temp);
             if (valid) {
-                name = editTextName.getText().toString();
-                address = editTextAddress.getText().toString();
+                name = etName.getText().toString();
+                address = etAddress.getText().toString();
                 age = Integer.parseInt(temp);
                 SharedPrefHelper.store(name, address, age, System.currentTimeMillis());
                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
@@ -61,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
     private boolean validateTextFields(String temp) {
         boolean valid = true;
         if (TextUtils.isEmpty(temp)) {
-            editTextAge.setError(getString(R.string.required_field));
+            etAge.setError(getString(R.string.requiredField));
             valid = false;
         } else {
             int age = Integer.parseInt(temp);
             if (age > 100) {
-                editTextAge.setError(getString(R.string.age_criteria));
+                etAge.setError(getString(R.string.ageCriteria));
                 valid = false;
             }
         }

@@ -1,12 +1,15 @@
 <resources>
-    <string name="app_name">SharedPreferences</string>
-    <string name="enter_address">Enter Address</string>
-    <string name="enter_age">Enter Age</string>
+    <string name="appName">SharedPreferences</string>
+    <string name="enterAddress">Enter Address</string>
+    <string name="enterAge">Enter Age</string>
     <string name="register">Register</string>
-    <string name="enter_name">Enter Name</string>
-    <string name="required_field">Required field</string>
-    <string name="age_criteria">Age shoud be less than 100</string>
+    <string name="enterName">Enter Name</string>
+    <string name="requiredField">Required field</string>
+    <string name="ageCriteria">Age should be less than 100</string>
     <string name="dateFormat">yyyy-MM-dd HH:mm:ss</string>
     <string name="name">Name</string>
-    <string name="age_print">Age : %d</string>
+    <string name="agePrint">Age : %d</string>
+    <string name="diffInTime">Difference in Time : %s</string>
+    <string name="address">Address : %s</string>
+    <string name="nameDisplay">Name : %s</string>
 </resources>

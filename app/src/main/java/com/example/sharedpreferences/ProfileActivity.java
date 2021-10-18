@@ -9,37 +9,38 @@ import java.util.concurrent.TimeUnit;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private TextView textViewName;
-    private TextView textViewAddress;
-    private TextView textViewAge;
-    private TextView textViewDiffInTime;
+    private TextView tvName;
+    private TextView tvAddress;
+    private TextView tvAge;
+    private TextView tvDiffInTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         setupView();
+        setData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setData();
+        tvDiffInTime.setText(getString(R.string.diffInTime, dateDiff(SharedPrefHelper.getDateMilli(), System.currentTimeMillis())));
     }
 
     private void setupView() {
-        textViewName = (TextView) findViewById(R.id.textViewName);
-        textViewAddress = (TextView) findViewById(R.id.textViewAddress);
-        textViewAge = (TextView) findViewById(R.id.textViewAge);
-        textViewDiffInTime = (TextView) findViewById(R.id.textViewDiffInTime);
+        tvName = (TextView) findViewById(R.id.textViewName);
+        tvAddress = (TextView) findViewById(R.id.textViewAddress);
+        tvAge = (TextView) findViewById(R.id.textViewAge);
+        tvDiffInTime = (TextView) findViewById(R.id.textViewDiffInTime);
     }
 
     // set the data in text fields
     private void setData() {
-        textViewName.setText(String.format("Name : %s", SharedPrefHelper.getName()));
-        textViewAddress.setText(String.format("Address : %s", SharedPrefHelper.getAddress()));
-        textViewAge.setText(String.format(getString(R.string.age_print), SharedPrefHelper.getAge()));
-        textViewDiffInTime.setText(String.format("Difference in Time : %s", dateDiff(SharedPrefHelper.getDateMilli(), System.currentTimeMillis())));
+        tvName.setText(String.format(getString(R.string.nameDisplay), SharedPrefHelper.getName()));
+        tvAddress.setText(getString(R.string.address, SharedPrefHelper.getAddress()));
+        tvAge.setText(getString(R.string.agePrint, SharedPrefHelper.getAge()));
+        tvDiffInTime.setText(getString(R.string.diffInTime, dateDiff(SharedPrefHelper.getDateMilli(), System.currentTimeMillis())));
     }
 
     // calculate the date difference
