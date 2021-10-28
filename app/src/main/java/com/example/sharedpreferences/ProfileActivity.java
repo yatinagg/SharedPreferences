@@ -29,10 +29,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupView() {
-        tvName = (TextView) findViewById(R.id.textViewName);
-        tvAddress = (TextView) findViewById(R.id.textViewAddress);
-        tvAge = (TextView) findViewById(R.id.textViewAge);
-        tvDiffInTime = (TextView) findViewById(R.id.textViewDiffInTime);
+        tvName = findViewById(R.id.textViewName);
+        tvAddress = findViewById(R.id.textViewAddress);
+        tvAge = findViewById(R.id.textViewAge);
+        tvDiffInTime = findViewById(R.id.textViewDiffInTime);
     }
 
     // set the data in text fields

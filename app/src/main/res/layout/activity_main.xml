@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/editTextName"
+        android:id="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
@@ -15,22 +15,20 @@
         android:layout_marginBottom="50dp"
         android:autofillHints="Name"
         android:hint="@string/enterName"
-        android:inputType="textPersonName"
-        android:maxLength="30" />
+        android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/editTextAddress"
+        android:id="@+id/et_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
         android:layout_marginBottom="50dp"
         android:autofillHints="Address"
         android:hint="@string/enterAddress"
-        android:inputType="textPersonName"
-        android:maxLength="30" />
+        android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/editTextAge"
+        android:id="@+id/et_age"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
@@ -41,7 +39,7 @@
         android:maxLength="2" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="100dp"

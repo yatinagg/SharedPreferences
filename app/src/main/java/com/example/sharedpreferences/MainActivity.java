@@ -36,10 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
     // setup View
     private void setUpView() {
-        button = findViewById(R.id.button);
-        etName = findViewById(R.id.editTextName);
-        etAddress = findViewById(R.id.editTextAddress);
-        etAge = findViewById(R.id.editTextAge);
+        button = findViewById(R.id.button_register);
+        etName = findViewById(R.id.et_name);
+        etAddress = findViewById(R.id.et_address);
+        etAge = findViewById(R.id.et_age);
     }
 
     // setup listener
@@ -60,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
     // validate text fields
     private boolean validateTextFields(String temp) {
         boolean valid = true;
+        if (TextUtils.isEmpty(etName.getText())) {
+            etName.setError(getString(R.string.requiredField));
+            valid = false;
+        }
+        if (TextUtils.isEmpty(etAddress.getText())) {
+            etAddress.setError(getString(R.string.requiredField));
+            valid = false;
+        }
         if (TextUtils.isEmpty(temp)) {
             etAge.setError(getString(R.string.requiredField));
             valid = false;
